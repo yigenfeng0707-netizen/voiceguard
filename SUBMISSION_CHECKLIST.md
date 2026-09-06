@@ -6,65 +6,44 @@
 
 | 编号 | 项目 | 状态 | 文件 |
 |------|------|------|------|
-| D1-D6 | 核心开发 (ASR/规则/LLM/报告/API) | ✅ | 33 scripts, 94 tests |
+| D1-D6 | 核心开发 (ASR/规则/LLM/报告/API) | ✅ | 34 scripts, 94 tests |
 | P1-1 | Skill 可组合性 (3 子技能 + qa_ops_daily) | ✅ | subskills/, scripts/qa_ops_daily.py |
 | P1-2 | 云增强骨架 (PII 脱敏 + 弱网降级) | ✅ | scripts/cloud_enhance.py |
 | P1-3 | NPU 完整 ASR (Encoder + CTC 双组件) | ✅ | scripts/npu_ctc.py, models/SenseVoiceSmall_ov/ |
 | P1-4 | Ollama GPU Vulkan 加速 | ✅ | reviewer.py create_reviewer() 工厂模式 |
 | P2-1 | 路演 PPT | ✅ | 路演/VoiceGuard路演.pptx (10页) |
-| P2-2 | 真机 Demo 视频 | ✅ | output/voiceguard_real_demo_v2.mp4 (27s, 1080p) |
-| P2-3 | ModelScope 文章 (更新版) | ✅ | community/modelscope_article.md (含 NPU CTC/Ollama/云增强/Skill可组合性) |
-| P2-4 | 魔搭 Skills Center 发布说明 | ✅ | community/modelscope_skill_release.md |
-| P2-5 | 提交包 v4 | ✅ | voiceguard_submission_v4.zip (87文件, 2.2MB, 含最新代码+CHECKLIST) |
+| P2-2 | Demo 视频 v3 (完整闭环展示) | ✅ | output/voiceguard_demo_v3.mp4 (252s, 1080p) |
+| P2-3 | ModelScope 文章 (含视频) | ✅ | modelscope.cn/learn/436280 |
+| P2-4 | 魔搭 Skills Center 发布 | ✅ | modelscope.cn/skills/gsym236998/voiceguard |
+| P2-5 | 提交包 v5 | ✅ | voiceguard_submission_v5.zip |
+| D2-1 | 规则库扩充至 72 条 (3 行业包) | ✅ | rules/finance.json(27) + insurance.json(18) + telesales.json(27) |
+| D2-2 | 集成验证深度补强 (39/39) | ✅ | output/integration_report_comprehensive.html |
+| D2-3 | E2E 边界场景鲁棒性 (14/14) | ✅ | output/e2e_edge_report.html, scripts/e2e_edge_cases.py |
+| D2-4 | Demo v3 完整闭环视频 | ✅ | output/voiceguard_demo_v3.mp4 (252s, 11场景) |
 
-## 待用户操作项 (P0)
+## 关键技术数据
 
-以下操作需要用户账号和平台权限，DuMate 无法代为执行：
-
-### 1. 魔搭 Skills Center 发布
-- **平台**: https://www.modelscope.cn
-- **操作**: 
-  1. 登录账号「根深叶茂」
-  2. 进入 Skills Center -> 发布技能
-  3. 填写技能信息（参考 `community/modelscope_skill_release.md`）
-  4. 添加标签: `Intel AI PC` `OpenVINO` `NPU` `语音质检` `合规风控`
-  5. 上传提交包 `voiceguard_submission_v4.zip`
-- **截止**: 路演前 (2026-09-18)
-
-### 2. ModelScope 开发者实践文章发布
-- **平台**: https://www.modelscope.cn
-- **操作**:
-  1. 登录账号「根深叶茂」
-  2. 发布文章 -> 粘贴 `community/modelscope_article.md` 内容
-  3. 添加标签: `Intel AI PC` `OpenVINO` `端侧AI`
-  4. 附带 Demo 视频 `output/voiceguard_real_demo_v2.mp4`
-- **截止**: 路演前 (2026-09-18)
-
-### 3. 比赛报名 / 作品提交
-- **平台**: Intel Connection 赛事官网
-- **操作**:
-  1. 完成赛事报名（如尚未报名）
-  2. 上传提交包 `voiceguard_submission_v4.zip`
-  3. 确认提交内容完整
-- **截止**: 2026-09-10 24:00（如已过期需确认延期）
-
-### 4. 路演准备
-- **材料**: 路演/VoiceGuard路演.pptx (10页)
-- **Demo**: output/voiceguard_real_demo_v2.mp4
-- **时间**: 2026-09-22~23 苏州
+| 指标 | 数值 |
+|------|------|
+| 规则引擎 | 72 条规则, 3ms, 0 tokens, 85% 候选过滤 |
+| NPU ASR | 4.17x 加速 (Encoder 1.689s + CTC 0.086s = 1.775s vs CPU 7.401s) |
+| GPU LLM | OpenVINO INT4 batch=10 1.9x / Ollama Vulkan 4.4x (12.0 tok/s) |
+| Token 节省 | 100% (API 零 token, 规则引擎全量初筛) |
+| 单元测试 | 94/94 全通过 |
+| 集成测试 | 39/39 调用 100% 成功率 (4 平台) |
+| E2E 边界场景 | 14/14 验证项全通过 (5 类边界场景) |
 
 ## 估分预测
 
 | 状态 | 估分 | 说明 |
 |------|------|------|
-| 当前 (代码+测试+Demo+PPT) | 73-76 | P1 全部完成, P2 全部完成 |
-| + 魔搭 + ModelScope 发布 | 78-80 | P0 发布完成 |
-| + 比赛报名提交 | 80-82 | P0 全部完成 |
-| + 路演发挥 | 85-87 | 全部补齐 |
+| 当前 (v5 全量交付) | 80-82 | 规则库 72 条 + 集成 39/39 + E2E 14/14 + Demo v3 |
+| + 路演发挥 | 85-87 | PPT + Q&A + 人气投票 |
 
-## 关键技术数据
+## 待完成项 (时间依赖)
 
-- NPU ASR: 4.17x 加速 (Encoder 234M + CTC 12.8M 双组件, RTF=0.030)
-- GPU LLM: 1.9x 加速 (batch=10, 29.76s) / Ollama Vulkan 4.4x (20.8s, 12.0 tok/s)
-- 规则引擎: 3ms, 0 tokens, 80% 候选过滤
-- 94 单元测试全通过, 5 场景 E2E 全通过, 4 平台 100% 成功
+| 项目 | 截止 | 状态 |
+|------|------|------|
+| 路演名单公布 | 9/14 | 等待 |
+| PPT 终版 | 9/18 | 视名单微调 |
+| 现场路演 | 9/22-23 | 苏州国际博览中心 |

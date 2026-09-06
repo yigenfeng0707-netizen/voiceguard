@@ -5,11 +5,12 @@ import os
 import hashlib
 
 ROOT = "D:/APPs/Intel苏州线下比赛/voiceguard"
-OUT = "D:/APPs/Intel苏州线下比赛/voiceguard_submission_v4.zip"
+OUT = "D:/APPs/Intel苏州线下比赛/voiceguard_submission_v5.zip"
 EXCLUDE_DIRS = {
     "models",
     "__pycache__",
     ".pytest_cache",
+    ".git",
     "demo/_tts_tmp",
     "demo/_tts_tmp_v2",
     "output/_video_tmp",
