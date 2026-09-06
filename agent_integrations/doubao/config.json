@@ -1,0 +1,27 @@
+{
+  "platform": "豆包办公",
+  "priority": "P2",
+  "mode": "http_api",
+  "api_url": "http://127.0.0.1:8765/v1/qa",
+  "fast_api_url": "http://127.0.0.1:8765/v1/qa/fast",
+  "health_url": "http://127.0.0.1:8765/health",
+  "method": "POST",
+  "audio_field": "audio",
+  "params": {
+    "packs": "all",
+    "device": "GPU"
+  },
+  "triggers": [
+    "通话质检",
+    "合规检查",
+    "录音质检",
+    "质检报告"
+  ],
+  "supported_formats": ["wav", "mp3", "m4a", "flac"],
+  "timeout_seconds": 180,
+  "response_format": "json",
+  "fallback_mode": "file_watch",
+  "fallback_dir": "data/inbox/",
+  "fallback_notes": "如豆包办公不支持外部 HTTP API 调用，降级为文件监听模式：监听 data/inbox/ 目录，有新音频文件自动触发质检，报告写入 data/outbox/。",
+  "notes": "探测阶段：先查豆包办公开放平台文档是否支持外部插件/API 调用。有 API → HTTP 模式接入；无 API → 文件监听模式 + 文档如实说明。底线满足至少 2 个平台现场可演示（QwenWork 必保 + WorkBuddy/TraeWork 任一）。"
+}

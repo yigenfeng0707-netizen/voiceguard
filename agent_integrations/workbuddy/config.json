@@ -1,0 +1,25 @@
+{
+  "platform": "WorkBuddy",
+  "priority": "P1",
+  "mode": "http_api",
+  "api_url": "http://127.0.0.1:8765/v1/qa",
+  "fast_api_url": "http://127.0.0.1:8765/v1/qa/fast",
+  "health_url": "http://127.0.0.1:8765/health",
+  "method": "POST",
+  "audio_field": "audio",
+  "params": {
+    "packs": "all",
+    "device": "GPU"
+  },
+  "triggers": [
+    "质检通话录音",
+    "合规检查",
+    "违规检测",
+    "通话质检报告",
+    "录音质检"
+  ],
+  "supported_formats": ["wav", "mp3", "m4a", "flac"],
+  "timeout_seconds": 180,
+  "response_format": "json",
+  "notes": "HTTP API 模式：需先启动 scripts/server.py（python scripts/server.py --port 8765）。平台配置触发词后，上传音频文件到 /v1/qa 接口，返回 JSON 质检报告。快速模式 /v1/qa/fast 仅规则引擎，秒级响应。"
+}

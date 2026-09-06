@@ -1,0 +1,221 @@
+{
+  "pack_id": "telesales",
+  "pack_name": "电销规范与服务质量质检规则包",
+  "version": "1.0.0",
+  "domain": "通用电话销售 / 客服外呼",
+  "basis": [
+    "《通信短信息服务管理规定》",
+    "《消费者权益保护法》",
+    "企业电销服务规范（通用基线）"
+  ],
+  "match_modes": ["keyword", "regex", "absent", "semantic"],
+  "rules": [
+    {
+      "rule_id": "TEL-001",
+      "name": "辱骂侮辱性语言",
+      "level": "redline",
+      "category": "服务态度",
+      "match_mode": "keyword",
+      "patterns": ["傻逼", "弱智", "滚", "有病吧", "爱买不买", "买不起就别问", "神经病", "蠢"],
+      "advice": "严禁任何辱骂、嘲讽、侮辱性表述，违者一票否决",
+      "basis": "服务规范红线"
+    },
+    {
+      "rule_id": "TEL-002",
+      "name": "威胁恐吓话术",
+      "level": "redline",
+      "category": "服务态度",
+      "match_mode": "keyword",
+      "patterns": ["不听是你的损失", "后果自负", "不买你会后悔", "我警告你", "别怪我没提醒你"],
+      "advice": "严禁以威胁、恐吓方式促成交易",
+      "basis": "《消费者权益保护法》消费者自愿原则"
+    },
+    {
+      "rule_id": "TEL-003",
+      "name": "强制话术/剥夺选择权",
+      "level": "warning",
+      "category": "销售行为",
+      "match_mode": "keyword",
+      "patterns": ["你必须买", "你肯定要", "没有别的选择", "只能这样办", "你没得选"],
+      "advice": "应尊重客户选择权，提供可拒绝的选项",
+      "basis": "《消费者权益保护法》自主选择权"
+    },
+    {
+      "rule_id": "TEL-004",
+      "name": "诱导提供虚假信息",
+      "level": "redline",
+      "category": "合规风险",
+      "match_mode": "keyword",
+      "patterns": ["帮你填个假的", "随便填一个", "写个假地址", "收入写高点", "隐瞒一下就行"],
+      "advice": "严禁诱导客户提供虚假资料，涉及欺诈风险",
+      "basis": "业务真实性与反欺诈要求"
+    },
+    {
+      "rule_id": "TEL-005",
+      "name": "未履行退订/取消承诺",
+      "level": "warning",
+      "category": "服务承诺",
+      "match_mode": "semantic",
+      "semantic_hint": "客户提出退订/取消/不要再打，坐席口头答应但未确认办理流程，或以话术拖延不实际执行",
+      "advice": "对客户退订诉求应明确确认办理流程与时限",
+      "basis": "服务承诺履行规范"
+    },
+    {
+      "rule_id": "TEL-006",
+      "name": "未告知通话录音",
+      "level": "notice",
+      "category": "信息披露",
+      "match_mode": "absent",
+      "absent_any": ["录音", "通话可能被记录", "本次通话将被记录"],
+      "advice": "通话开始应告知录音事宜，保障客户知情权",
+      "basis": "《个人信息保护法》告知义务"
+    },
+    {
+      "rule_id": "TEL-007",
+      "name": "频繁打断客户",
+      "level": "warning",
+      "category": "服务态度",
+      "match_mode": "semantic",
+      "semantic_hint": "说话人重叠分析：坐席多次在客户未说完时强行打断抢话（需结合重叠语音时长占比判断）",
+      "advice": "应耐心倾听，避免打断客户陈述",
+      "basis": "服务规范"
+    },
+    {
+      "rule_id": "TEL-008",
+      "name": "骚扰式重复呼叫",
+      "level": "warning",
+      "category": "呼叫行为",
+      "match_mode": "semantic",
+      "semantic_hint": "通话中出现客户提及'你们怎么又打来了/昨天刚打过/一天打好几个'等表述，提示存在高频重复呼叫",
+      "advice": "同一客户呼叫频次应受控，命中勿扰名单立即停呼",
+      "basis": "《通信短信息服务管理规定》及工信部扰民治理要求"
+    },
+    {
+      "rule_id": "TEL-009",
+      "name": "夸大功效/虚假宣传",
+      "level": "redline",
+      "category": "宣传合规",
+      "match_mode": "keyword",
+      "patterns": ["包治", "根治", "百分百有效", "无效退款我们兜底", "全网最低价", "国家级", "驰名商标"],
+      "advice": "宣传须有事实依据，禁用绝对化用语",
+      "basis": "《广告法》第九条绝对化用语禁令"
+    },
+    {
+      "rule_id": "TEL-010",
+      "name": "结束语不规范",
+      "level": "notice",
+      "category": "服务规范",
+      "match_mode": "absent",
+      "absent_any": ["再见", "感谢", "祝您"],
+      "scope": "last_30s",
+      "advice": "通话结束应有规范结束语",
+      "basis": "服务规范"
+    },
+    {
+      "rule_id": "TEL-011",
+      "name": "私下承诺公司外优惠",
+      "level": "redline",
+      "category": "合规风险",
+      "match_mode": "keyword",
+      "patterns": ["我个人送你", "私下返现", "给你走个后门", "我偷偷给你"],
+      "advice": "严禁以个人名义承诺公司政策外利益",
+      "basis": "廉洁与合规要求"
+    },
+    {
+      "rule_id": "TEL-012",
+      "name": "推诿搪塞不解决问题",
+      "level": "notice",
+      "category": "服务态度",
+      "match_mode": "semantic",
+      "semantic_hint": "客户多次追问同一问题，坐席以'不知道/不归我管/你问别人'等推诿话术回应且未提供解决路径",
+      "advice": "首问负责，无法解答时应转接或承诺回复时限",
+      "basis": "服务规范"
+    },
+    {
+      "rule_id": "TEL-013",
+      "name": "未表明机构名称",
+      "level": "warning",
+      "category": "信息披露",
+      "match_mode": "absent",
+      "absent_any": ["公司", "中心", "平台", "这里是"],
+      "scope": "first_60s",
+      "advice": "通话开始60秒内须表明所属机构名称",
+      "basis": "《消费者权益保护法》知情权"
+    },
+    {
+      "rule_id": "TEL-014",
+      "name": "非法时段外呼",
+      "level": "warning",
+      "category": "呼叫行为",
+      "match_mode": "semantic",
+      "semantic_hint": "客户提到现在时间不合适（如在休息/吃饭/开会/太早/太晚），坐席仍不停止外呼强行推销",
+      "example_bad": "客户：现在几点了你还在打，我在睡觉。坐席：就耽误您一分钟",
+      "advice": "尊重客户作息时间，客户表示不便应立即致歉并择时再联",
+      "basis": "《通信短信息服务管理规定》发送时段限制与服务规范"
+    },
+    {
+      "rule_id": "TEL-015",
+      "name": "冒充其他机构",
+      "level": "redline",
+      "category": "合规风险",
+      "match_mode": "keyword",
+      "patterns": ["我们是移动的", "我们是联通官方", "电信客服", "运营商通知", "公安局通知", "社保局通知", "医保中心"],
+      "advice": "严禁冒充政府机关、运营商或其他机构名义进行营销",
+      "basis": "《反不正当竞争法》禁止虚假宣传和冒充"
+    },
+    {
+      "rule_id": "TEL-016",
+      "name": "误导自动续费",
+      "level": "redline",
+      "category": "合规风险",
+      "match_mode": "regex",
+      "regex": ["免费试用.{0,10}(不用.{0,4}取消|自动)", "(先免费|白送|不花钱).{0,10}(到期|之后).{0,6}(续|扣)", "试用期.{0,6}不花钱"],
+      "example_bad": "先免费试用一个月，到期自动续费，不用管它",
+      "example_good": "试用期30天免费，到期后自动续费¥15/月，如不需要可随时取消",
+      "advice": "须明确告知试用期、续费机制及取消方式",
+      "basis": "《消费者权益保护法》知情权与自主选择权"
+    },
+    {
+      "rule_id": "TEL-017",
+      "name": "打压客户独立判断",
+      "level": "warning",
+      "category": "销售行为",
+      "match_mode": "keyword",
+      "patterns": ["别去比了", "不用查了", "别看别的了", "信我就对了", "别听他们的", "网上都是假的", "不用考虑了"],
+      "advice": "应鼓励客户自主比较判断，不得打压其独立决策权",
+      "basis": "《消费者权益保护法》消费者自主选择权"
+    },
+    {
+      "rule_id": "TEL-018",
+      "name": "泄露他人信息",
+      "level": "redline",
+      "category": "信息安全",
+      "match_mode": "keyword",
+      "patterns": ["你邻居也买了", "你同事也办了", "楼上的也签了", "某某也办的", "你那个朋友也签了", "旁边那户也买了"],
+      "advice": "严禁以泄露其他客户信息作为营销手段",
+      "basis": "《个人信息保护法》禁止非法提供他人信息"
+    },
+    {
+      "rule_id": "TEL-019",
+      "name": "不当情绪/长时间静默",
+      "level": "notice",
+      "category": "服务规范",
+      "match_mode": "semantic",
+      "semantic_hint": "通话中出现超过15秒的静默（双方均未说话），或坐席叹气、不耐烦等负面情绪表现",
+      "advice": "保持通话活跃度，避免长时间静默或负面情绪外露",
+      "basis": "服务规范"
+    },
+    {
+      "rule_id": "TEL-020",
+      "name": "虚假资质/头衔",
+      "level": "redline",
+      "category": "合规风险",
+      "match_mode": "regex",
+      "regex": ["(高级|资深|首席).{0,4}(理财师|规划师|顾问).{0,6}(认证|持证|注册)", "(CFA|CFP|FRM).{0,4}(持证|持牌|认证)", "国家.{0,4}(级|认证).{0,4}(理财师|规划师)"],
+      "example_bad": "我是国家认证高级理财师，CFA持证",
+      "example_good": "我的从业编号是XX，可在XX网站查询",
+      "advice": "资质头衔须真实可查，禁止虚构职业资格",
+      "basis": "《广告法》禁止虚假资质宣传"
+    }
+  ]
+}
