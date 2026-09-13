@@ -26,6 +26,17 @@ description: |
 
 ## 用法
 
+### 独立 CLI 调用（推荐，Skill 级入口）
+
+```
+python subskills/vg-report-gen/run.py --hits hits.json [--format html|markdown|json] [--output report.html]
+```
+
+输入 `hits.json` 为 `vg-rules-check` 的输出契约；可选 `--verdicts verdicts.json`
+（语义复核结论）生成完整模式报告。
+
+### Python API
+
 ```python
 from report_gen import build_report, render_html, render_markdown, render_json
 

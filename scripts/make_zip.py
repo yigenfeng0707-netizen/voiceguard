@@ -5,7 +5,7 @@ import os
 import hashlib
 
 ROOT = "D:/APPs/Intel苏州线下比赛/voiceguard"
-OUT = "D:/APPs/Intel苏州线下比赛/voiceguard_submission_v5.zip"
+OUT = "D:/APPs/Intel苏州线下比赛/voiceguard_submission_v6.zip"
 EXCLUDE_DIRS = {
     "models",
     "__pycache__",

@@ -1,5 +1,41 @@
 # VoiceGuard 进度日志
 
+## 提交后 · 2026-09-13（周日）— 专家套件升级 ✅
+
+### 升级目标（路演叙事对齐评审原文）
+评审要求"Skills/专家套件具备**调用其它 skills、并被其它 skills 调用**的能力"。
+将单技能升级为**五技能专家套件**：1 编排核心 + 3 子技能 + 1 上层消费者，全部实证。
+
+### 产出
+| 交付物 | 状态 |
+|--------|------|
+| 3 个子技能独立 CLI 入口（`subskills/*/run.py`，JSON 数据契约 segments/hits） | ✅ |
+| `qa-ops-daily` 上层技能实体化（`suite/qa-ops-daily/`，批量质检 + 运营日报 + 调用链日志） | ✅ |
+| **skill 调 skill 实证**：`vg-rules-check --audio` 以子进程调用 vg-transcribe（rc=0, 20.5s, NPU） | ✅ |
+| **被上层调用实证**：qa-ops-daily 批量 5 段录音调用 voiceguard-qa，5/5 OK（28-67s/段），`output/qa_ops_daily/call_chain.md` | ✅ |
+| 运营日报：平均分 35.0 / 合格率 40%（合规通 85-90 分 vs 违规通 0 分，对照鲜明） | ✅ |
+
+### 踩坑记录（新增）
+8. **Windows 管道 EOF 死锁**：subprocess `capture_output=True` 调用 funasr/OpenVINO 子进程时，后台线程持有管道句柄导致父进程永久挂起 → 修复：stdout/stderr 重定向到临时文件 + 超时兜底
+9. **funasr 解释器清理不稳定**：子进程写完产物后在清理阶段挂起（CPU 冻结）或非零退出 → 修复：CLI 入口 `os._exit()` 硬退出（产物已 flush）+ 调用方"以产物文件为准"
+10. **GBK/UTF-8 混合 stderr**：funasr/OpenVINO 警告按系统 GBK 代码页输出，父进程按 UTF-8 解码报 `UnicodeDecodeError 0xa8` → 修复：二进制读取 + `errors="replace"` 容错解码
+
+### Skill 互调拓扑（路演第 4/5 页素材）
+```
+qa-ops-daily（上层技能：批量质检 + 运营日报）
+  └── 调用 → voiceguard-qa（主编排技能，CLI/HTTP）
+        ├── 调用 → vg-transcribe（子技能：端侧 ASR，NPU/GPU/CPU）
+        ├── 调用 → vg-rules-check（子技能：规则引擎零 token 初筛）
+        └── 调用 → vg-report-gen（子技能：结构化质检报告）
+```
+
+### 9-13 追加：v6 套件包结构
+`qa-ops-daily` 从工作区根目录移入 `voiceguard/suite/qa-ops-daily/`（魔搭发布自包含：
+单文件夹 = 单个 skill 包）。`scripts/make_zip.py` 输出 v6 提交包，
+`community/modelscope_skill_release.md` 同步升级为套件叙事。
+
+---
+
 ## D0 · 2026-09-04（周五）晚 — 完成 ✅
 
 ### 环境确认

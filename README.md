@@ -27,6 +27,7 @@
 | 目录 | 用途 |
 |------|------|
 | `scripts/` | 流水线脚本（预处理/ASR/规则引擎/复核/报告/调度/HTTP API/NPU 加速） |
+| `subskills/` | 3 个可独立调用子技能（vg-transcribe / vg-rules-check / vg-report-gen，各带 `run.py` CLI 入口与 JSON 数据契约） |
 | `rules/` | 行业规则包（finance.json / telesales.json，可插拔） |
 | `models/` | OpenVINO 量化模型 + ASR encoder IR（gitignore） |
 | `agent_integrations/` | 四大 Agent 平台集成配置与验证 |
@@ -35,6 +36,9 @@
 | `community/` | ModelScope 开发者实践文章 |
 | `tests/` | 测试用例（94 个，覆盖核心模块） |
 | `output/` | 质检报告 + 集成报告 + benchmark 数据 |
+
+**上层技能（Skill 互调实证）**：`suite/qa-ops-daily/` — 质检运营日报技能，以独立子进程批量调用本技能 CLI（或 HTTP API）
+完成当日全量质检并汇总日报 + 调用链日志（实证样例：`output/qa_ops_daily/call_chain.md`）。
 
 ## 快速开始
 

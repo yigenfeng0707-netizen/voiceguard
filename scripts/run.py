@@ -97,3 +97,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # 硬退出：funasr/OpenVINO 的非守护后台线程在解释器清理阶段可能
+    # 挂起或崩溃（rc!=0），导致上层技能（qa-ops-daily）等待/误判失败。
+    # 产物已落盘并 flush，直接 os._exit 绕过清理。
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(0)

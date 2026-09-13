@@ -26,11 +26,26 @@
 
 ## 核心能力
 
-1. **40 条行业规则**：金融 20 + 电销 20，覆盖保本保息/夸大收益/索要验证码/冒充机构/饥饿营销等真实违规场景
+1. **72 条行业规则**：金融 27 + 电销 27 + 保险 18，覆盖保本保息/夸大收益/索要验证码/冒充机构/饥饿营销/隐瞒免责等真实违规场景
 2. **三级降级**：NPU > GPU > CPU 自动探测，无需手动配置
-3. **Skill 可组合**：3 个子技能 (vg-transcribe / vg-rules-check / vg-report-gen) 可独立调用
-4. **批量运营**：qa_ops_daily 脚本支持目录扫描、批量质检、运营日报生成
+3. **专家套件（Skill 互调，已实证）**：五技能拓扑——1 编排核心 + 3 子技能 + 1 上层消费者，双向互调均有独立进程/HTTP 级证据（`output/qa_ops_daily/call_chain.md`）
+4. **批量运营**：`suite/qa-ops-daily` 上层技能批量调用 voiceguard-qa 生成运营日报（平均分/合格率/TOP 违规/token 节省合计）
 5. **云增强骨架**：6 种 PII 脱敏 + 云端 API 占位 + 弱网自动降级
+
+### 专家套件拓扑（Skill 互调实证）
+
+```
+qa-ops-daily（suite/qa-ops-daily · 上层技能：批量质检 + 运营日报）
+  └── 调用 → voiceguard-qa（主编排技能，CLI/HTTP 双入口）
+        ├── vg-transcribe     （subskills/：端侧 ASR，NPU/GPU/CPU）
+        ├── vg-rules-check    （subskills/：规则引擎零 token 初筛）
+        └── vg-report-gen     （subskills/：结构化质检报告）
+```
+
+- **调用其它 skills（实证）**：`vg-rules-check --audio` 以子进程调用 `vg-transcribe`（rc=0，20.5s，NPU）
+- **被其它 skills 调用（实证）**：`qa-ops-daily` 批量 5 段录音逐段调用 `voiceguard-qa`，5/5 成功（28-67s/段），
+  调用链日志 `output/qa_ops_daily/call_chain.md`
+- **运营日报结论**：合规通话 85-90 分 vs 违规通话 0 分（9-13 条红线），对照鲜明
 
 ## 安装与运行
 
@@ -63,8 +78,15 @@ python scripts/server.py --port 8765
 # POST /v1/qa/fast  快速筛查
 # GET  /health       健康检查
 
-# 5. 批量质检 + 运营日报
-python scripts/qa_ops_daily.py --audio-dir ./recordings --output daily_report.html
+# 5. 批量质检 + 运营日报（上层技能 qa-ops-daily，Skill 互调实证）
+python suite/qa-ops-daily/run.py                      # 扫描 demo/samples 全量质检
+python suite/qa-ops-daily/run.py --audio-dir D:\calls --full   # 完整模式（含语义复核）
+# 产出: output/qa_ops_daily/qa_ops_daily_report.{html,md,json} + call_chain.md
+
+# 6. 子技能独立调用（专家套件可组合性）
+python subskills/vg-transcribe/run.py call.wav --output seg.json
+python subskills/vg-rules-check/run.py --segments seg.json --output hits.json
+python subskills/vg-report-gen/run.py --hits hits.json --format html --output report.html
 ```
 
 ## Benchmark

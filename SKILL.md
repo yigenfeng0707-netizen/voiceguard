@@ -96,5 +96,12 @@ OpenVINO 1.7B 有 2 个误报（将合规话术误判为违规），Ollama 4B �
 2. 重启 Ollama：关闭后重新 `ollama serve`
 3. 验证：`curl http://localhost:11434/api/ps` 查看 `size_vram > 0`
 
-子技能（可被独立调用）：`vg-transcribe` / `vg-rules-check` / `vg-report-gen`
-本技能可被上层技能调用，如 `qa-ops-daily`（批量质检 + 运营日报）。
+子技能（可被独立调用，各带 CLI 入口 `subskills/<name>/run.py`）：
+
+- `vg-transcribe` — 端侧 ASR 转写（`--output` 输出 segments JSON 契约）
+- `vg-rules-check` — 规则引擎零 token 初筛（`--segments`/`--audio`/`--text` 三模式；`--audio` 模式自动以子进程调用 vg-transcribe，即 skill 调 skill 实证）
+- `vg-report-gen` — 结构化质检报告（`--hits` 消费 vg-rules-check 输出契约）
+
+本技能可被上层技能调用：`qa-ops-daily`（批量质检 + 运营日报）位于 `suite/qa-ops-daily/`，
+以子进程调用本技能 CLI（`scripts\run.py`）或 HTTP API（`/v1/qa`），逐段质检后汇总日报，
+并输出 `call_chain.md` 调用链日志作为互调证据（实证样例见 `output/qa_ops_daily/`）。

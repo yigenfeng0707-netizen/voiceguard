@@ -27,15 +27,23 @@ CTC Head 需 FP32 精度（FP16 对 25055 维投影 max diff 14.1 不可用）�
 
 ## 用法
 
-### 命令行
+### 独立 CLI 调用（推荐，Skill 级入口）
+
+```
+python subskills/vg-transcribe/run.py <音频文件> [--device auto|cpu|gpu|npu] [--language auto] [--output seg.json]
+```
+
+输出 segments JSON 契约（`skill: vg-transcribe`），可直接被 `vg-rules-check --segments` 消费。
+
+### Python API
 
 ```python
 from transcribe import transcribe
 
 result = transcribe(
     "call.wav",
-    device="NPU",       # NPU / GPU / CPU / auto
-    language="auto",    # auto / zh / en / ja / ko
+    device="auto",       # auto / cpu / gpu / npu
+    language="auto",     # auto / zh / en / ja / ko
 )
 # result = {"segments": [...], "text": str, "lang": str, "asr_stats": dict}
 ```
@@ -83,3 +91,5 @@ qa-ops-daily (上层技能)
   ├── vg-rules-check → 输入 segments → 输出 hits
   └── vg-report-gen → 输入 hits → 输出 QAReport
 ```
+
+> 实证：`vg-rules-check --audio` 模式即以子进程调用本技能 CLI（`subskills/vg-transcribe/run.py`）。

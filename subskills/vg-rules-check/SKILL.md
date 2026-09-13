@@ -36,6 +36,24 @@ description: |
 
 ## 用法
 
+### 独立 CLI 调用（推荐，Skill 级入口）
+
+```
+# 模式 A：消费 vg-transcribe 的输出（上游 skill 已跑过）
+python subskills/vg-rules-check/run.py --segments seg.json [--packs finance]
+
+# 模式 B：直接传音频 —— 自动以子进程调用 vg-transcribe skill 转写（Skill 互调实证）
+python subskills/vg-rules-check/run.py --audio call.wav [--device auto]
+
+# 模式 C：纯文本快速自测（免 ASR）
+python subskills/vg-rules-check/run.py --text "这款产品保本保息"
+```
+
+输出 hits JSON 契约（`skill: vg-rules-check`，含 `called_skills` 调用链字段与透传
+`segments`），可直接被 `vg-report-gen --hits` 消费。
+
+### Python API
+
 ```python
 from rules_engine import load_rule_packs, run_engine
 from rules_engine import Segment
