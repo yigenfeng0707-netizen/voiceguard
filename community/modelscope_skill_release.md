@@ -124,7 +124,7 @@ python subskills/vg-report-gen/run.py --hits hits.json --format html --output re
 
 ## 许可证
 
-MIT License
+Apache License 2.0
 
 ## 赛事
 
